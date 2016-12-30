@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import json
 import sqlite3
 import sys
@@ -17,7 +18,7 @@ def get_recent_tweets():
 def generate_random_tweet():
     db_connection = sqlite3.connect(config.SQLITE_DB)
     db_cursor = db_connection.cursor()
-    db_cursor.execute('SELECT * FROM tweets ORDER BY id DESC LIMIT 150')
+    db_cursor.execute('SELECT * FROM tweets ORDER BY id DESC LIMIT 250')
 
     dataset = ''
 
@@ -26,8 +27,8 @@ def generate_random_tweet():
         dataset += '<>' # delimiter
     db_connection.close()
 
-    model = SimulatorText(dataset, state_size=2)
-    tweet = model.make_short_sentence(140, tries=100)
+    model = SimulatorText(dataset, state_size=3)
+    tweet = model.make_short_sentence(140, tries=150)
     if tweet is None:
         sys.exit(0)
     tweet = tweet.replace('&amp;', '&')
@@ -56,4 +57,4 @@ def send_random_tweet():
 
 if __name__ == '__main__':
     t = send_random_tweet()
-    #print(len(t), t)
+    print(len(t), t)
